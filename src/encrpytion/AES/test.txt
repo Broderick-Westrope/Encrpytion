@@ -1,0 +1,199 @@
+
+84    CHAPTER 2 / INTRODUCTION TO NUMBER THEORY
+The congruence relation is used to define residue classes. Those numbers that 
+have the same remainder r when divided by m form a residue class (mod m). There 
+are m residue classes (mod m). For a given remainder r, the residue class to which it 
+belongs consists of the numbers
+ r, r { m, r { 2m,  c  
+According to our definition, the congruence
+ a K b (mod m) 
+signifies that the numbers a and b differ by a multiple of m. Consequently, the con-
+gruence can also be expressed in the terms that a and b belong to the same residue 
+class (mod m).
+85
+PART TWO: SYMMETRIC CIPHERS 
+CHAPTER
+Classical Encryption Techniques3.1 Symmetric Cipher Model
+Cryptography
+Cryptanalysis and Brute-Force Attack
+3.2 Substitution Techniques
+Caesar Cipher
+Monoalphabetic Ciphers
+Playfair Cipher
+Hill Cipher
+Polyalphabetic Ciphers
+One-Time Pad
+3.3 Transposition Techniques
+3.4 Rotor Machines
+3.5 Steganography
+3.6 Key Terms, Review Questions, and Problems
+86    CHAPTER 3 / CLASSICAL ENCRYPTION TECHNIQUES
+Symmetric  encryption,  also  referred  to  as  conventional  encryption  or  single-key  
+encryption, was the only type of encryption in use prior to the development of public-
+key encryption in the 1970s. It remains by far the most widely used of the two types 
+of encryption. Part One examines a number of symmetric ciphers. In this chapter, we 
+begin with a look at a general model for the symmetric encryption process; this will 
+enable us to understand the context within which the algorithms are used. Next, we 
+examine a variety of algorithms in use before the computer era. Finally, we look briefly 
+at a different approach known as steganography. Chapters 4 and 6 introduce the two 
+most widely used symmetric cipher: DES and AES.
+Before beginning, we define some terms. An original message is known as the 
+plaintext, while the coded message is called the ciphertext. The process of convert-
+ing from plaintext to ciphertext is known as enciphering or encryption; restoring the 
+plaintext from the ciphertext is deciphering or decryption. The many schemes used 
+for encryption constitute the area of study known as cryptography. Such a scheme 
+is known as a cryptographic  system or a cipher. Techniques used for deciphering a 
+message without any knowledge of the enciphering details fall into the area of crypt-
+analysis. Cryptanalysis is what the layperson calls “breaking the code.” The areas of 
+cryptography and cryptanalysis together are called cryptology.
+ 3.1 SYMMETRIC CIPHER MODEL
+A symmetric encryption scheme has five ingredients (Figure 3.1):
+ ■ Plaintext:  This is the original intelligible message or data that is fed into the 
+algorithm as input.
+ ■ Encryption  algorithm:   The  encryption  algorithm  performs  various  substitu-
+tions and transformations on the plaintext.
+ ■ Secret key:  The secret key is also input to the encryption algorithm. The key is 
+a value independent of the plaintext and of the algorithm. The algorithm will 
+produce  a  different  output  depending  on  the  specific  key  being  used  at  the  
+time. The exact substitutions and transformations performed by the  algorithm 
+depend on the key.
+LEARNING OBJECTIVES
+After studying this chapter, you should be able to:
+ ◆ Present an overview of the main concepts of symmetric cryptography.
+ ◆ Explain the difference between cryptanalysis and brute-force attack.
+ ◆ Understand the operation of a monoalphabetic substitution cipher.
+ ◆ Understand the operation of a polyalphabetic cipher.
+ ◆ Present an overview of the Hill cipher.
+ ◆ Describe the operation of a rotor machine.
+3.1 / SYMMETRIC CIPHER MODEL 87
+ ■ Ciphertext:  This is the scrambled message produced as output. It depends on 
+the plaintext and the secret key. For a given message, two different keys will 
+produce  two  different  ciphertexts. The  ciphertext  is  an  apparently  random  
+stream of data and, as it stands, is unintelligible.
+ ■ Decryption  algorithm:   This  is  essentially  the  encryption  algorithm  run  in  
+reverse.  It  takes  the  ciphertext  and  the  secret  key  and  produces  the  original  
+plaintext.
+There are two requirements for secure use of conventional encryption:
+1. We need a strong encryption algorithm. At a minimum, we would like the algo-
+rithm to be such that an opponent who knows the algorithm and has access to 
+one or more ciphertexts would be unable to decipher the ciphertext or figure 
+out the key. This requirement is usually stated in a stronger form: The oppo-
+nent should be unable to decrypt ciphertext or discover the key even if he or 
+she is in possession of a number of ciphertexts together with the plaintext that 
+produced each ciphertext.
+2. Sender  and  receiver  must  have  obtained  copies  of  the  secret  key  in  a  secure  
+fashion  and  must  keep  the  key  secure.  If  someone  can  discover  the  key  and  
+knows the algorithm, all communication using this key is readable.
+We  assume  that  it  is  impractical  to  decrypt  a  message  on  the  basis  of  the  
+ciphertext plus knowledge of the encryption/decryption algorithm. In other words, 
+we do not need to keep the algorithm secret; we need to keep only the key secret. 
+This feature of symmetric encryption is what makes it feasible for widespread use. 
+The fact that the algorithm need not be kept secret means that manufacturers can 
+and have developed low-cost chip implementations of data encryption algorithms. 
+These chips are widely available and incorporated into a number of products. With 
+the use of symmetric encryption, the principal security problem is maintaining the 
+secrecy of the key.
+Let  us  take  a  closer  look  at  the  essential  elements  of  a  symmetric  encryp-
+tion  scheme,  using  Figure  3.2.  A  source  produces  a  message  in  plaintext,  
+X = [X1, X2,  c , XM].  The  M  elements  of  X  are  letters  in  some  finite  alphabet.  
+Traditionally,  the  alphabet  usually  consisted  of  the  26  capital  letters.  Nowadays,  
+Figure 3.1 Simplified Model of Symmetric Encryption
+Plaintext
+input
+Y = E(K, X ) X = D(K, Y )
+X
+KK
+Transmitted
+ciphertext
+Plaintext
+output
+Secret key shared by
+sender and recipient
+Secret key shared by
+sender and recipient
+Encryption algorithm
+(e.g., AES)
+Decryption algorithm
+(reverse of encryption
+algorithm)
+88    CHAPTER 3 / CLASSICAL ENCRYPTION TECHNIQUES
+the  binary  alphabet  {0, 1}  is  typically  used.  For  encryption,  a  key  of  the  form  
+K = [K1, K2,  c , KJ] is generated. If the key is generated at the message source, 
+then it must also be provided to the destination by means of some secure channel. 
+Alternatively,  a  third  party  could  generate  the  key  and  securely  deliver  it  to  both  
+source and destination.
+With the message X and the encryption key K as input, the encryption algo-
+rithm forms the ciphertext Y = [Y1, Y2,  c , YN]. We can write this as
+ Y = E(K, X) 
+This  notation  indicates  that  Y  is  produced  by  using  encryption  algorithm  E  as  a  
+function  of  the  plaintext  X,  with  the  specific  function  determined  by  the  value  of  
+the key K.
+The  intended  receiver,  in  possession  of  the  key,  is  able  to  invert  the  
+transformation:
+ X = D(K, Y) 
+An  opponent,  observing  Y  but  not  having  access  to  K  or  X,  may  attempt  to  
+recover X or K or both X and K. It is assumed that the opponent knows the encryp-
+tion  (E)  and  decryption  (D)  algorithms.  If  the  opponent  is  interested  in  only  this  
+particular message, then the focus of the effort is to recover X by generating a plain-
+text  estimate  Xn.  Often,  however,  the  opponent  is  interested  in  being  able  to  read  
+future messages as well, in which case an attempt is made to recover K by generat-
+ing an estimate Kn.
+Figure 3.2 Model of Symmetric Cryptosystem
+Message
+source
+Cryptanalyst
+Key
+source
+Destination
+X X
+X
+K
+Y = E(K, X )
+Secure channel
+K
+Encryption
+algorithm
+Decryption
+algorithm
+3.1 / SYMMETRIC CIPHER MODEL 89
+Cryptography
+Cryptographic systems are characterized along three independent dimensions:
+1.  The  type  of  operations  used  for  transforming  plaintext  to  ciphertext. All 
+encryption  algorithms  are  based  on  two  general  principles:  substitution,  
+in which each element in the plaintext (bit, letter, group of bits or letters) 
+is  mapped  into  another  element,  and  transposition,  in  which  elements  
+in  the  plaintext  are  rearranged. The  fundamental  requirement  is  that  no  
+information  be  lost  (i.e.,  that  all  operations  are  reversible).  Most  systems,  
+referred to as product systems, involve multiple stages of substitutions and 
+transpositions.
+2. The  number  of  keys  used.  If  both  sender  and  receiver  use  the  same  key,  the  
+system  is  referred  to  as  symmetric,  single-key,  secret-key,  or  conventional  
+ encryption. If the sender and receiver use different keys, the system is referred 
+to as asymmetric, two-key, or public-key encryption.
+3. The way in which the plaintext is processed. A block cipher processes the input 
+one  block  of  elements  at  a  time,  producing  an  output  block  for  each  input  
+block. A stream  cipher  processes  the  input  elements  continuously,  producing  
+output one element at a time, as it goes along.
+Cryptanalysis and Brute-Force Attack
+Typically, the objective of attacking an encryption system is to recover the key in 
+use rather than simply to recover the plaintext of a single ciphertext. There are two 
+general approaches to attacking a conventional encryption scheme:
+ ■ Cryptanalysis:  Cryptanalytic attacks rely on the nature of the algorithm plus 
+perhaps some knowledge of the general characteristics of the plaintext or even 
+some sample plaintext–ciphertext pairs. This type of attack exploits the charac-
+teristics of the algorithm to attempt to deduce a specific plaintext or to deduce 
+the key being used.
+ ■ Brute-force attack:  The attacker tries every possible key on a piece of cipher-
+text until an intelligible translation into plaintext is obtained. On average, half 
+of all possible keys must be tried to achieve success.
+If either type of attack succeeds in deducing the key, the effect is catastrophic: 
+All future and past messages encrypted with that key are compromised.
+We first consider cryptanalysis and then discuss brute-force attacks.
+Table 3.1 summarizes the various types of cryptanalytic attacks based on the 
+amount  of  information  known  to  the  cryptanalyst.  The  most  difficult  problem  is  
+presented when all that is available is the ciphertext only. In some cases, not even 
+the encryption algorithm is known, but in general, we can assume that the opponent 
+does know the algorithm used for encryption. One possible attack under these cir-
+cumstances is the brute-force approach of trying all possible keys. If the key space 
+is very large, this becomes impractical. Thus, the opponent must rely on an analysis 
+of the ciphertext itself, generally applying various statistical tests to it. To use this 
