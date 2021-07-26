@@ -2,90 +2,80 @@ import math
 
 
 def encrypt(_plaintext, _key):
-    cipher = ""
-  
-    # track key indices
-    k_indx = 0
-  
-    msg_len = float(len(_plaintext))
-    msg_lst = list(_plaintext)
-    key_lst = sorted(list(_key))
-  
-    # Calculate how many columns the matrix needs
-    col = len(_key)
+    ctLength = float(len(_plaintext))
 
-    # Calculate how many rows the matrix needs
-    row = int(math.ceil(msg_len / col))
+    # Calculate how many columns and rows the matrix needs
+    col = len(_key)
+    row = int(math.ceil(ctLength / col))
   
+    # List of all the characters in the ciphertext
+    ctList = list(_plaintext)
+
     # Add a filler character ($) in the empty cells
-    fill_null = int((row * col) - msg_len)
-    msg_lst.extend('$' * fill_null)
+    fill_null = int((row * col) - ctLength)
+    ctList.extend('$' * fill_null)
   
     # Create the matrix and insert the characters horizontally
-    matrix = [msg_lst[i: i + col] 
-              for i in range(0, len(msg_lst), col)]
+    matrix = [ctList[i: i + col] 
+              for i in range(0, len(ctList), col)]
   
     # Read the matrix vertically, in the order of the key
+    keyIndex = 0
+    ciphertext = ""
+    keyList = sorted(list(_key))
     for _ in range(col):
-        curr_idx = _key.index(key_lst[k_indx])
-        cipher += ''.join([row[curr_idx] 
+        currentIndex = _key.index(keyList[keyIndex])
+        ciphertext += ''.join([row[currentIndex] 
                           for row in matrix])
-        k_indx += 1
+        keyIndex += 1
   
-    return cipher
+    return ciphertext
 
 
 def decrypt(_ciphertext, _key):
-    msg = ""
-  
-    # track key indices
-    k_indx = 0
-  
-    # track msg indices
-    msg_indx = 0
-    msg_len = float(len(_ciphertext))
-    msg_lst = list(_ciphertext)
-  
-    # calculate column of the matrix
+    # Length of the plaintext
+    ptLength = float(len(_ciphertext)) 
+
+    # Calculate the number of columns and rows in the matrix
     col = len(_key)
-      
-    # calculate maximum row of the matrix
-    row = int(math.ceil(msg_len / col))
-  
-    # convert key into list and sort 
-    # alphabetically so we can access 
-    # each character by its alphabetical position.
-    key_lst = sorted(list(_key))
-  
-    # create an empty matrix to 
-    # store deciphered message
-    dec_cipher = []
+    row = int(math.ceil(ptLength / col))
+
+    # Create an empty matrix to store the plaintext
+    ptMatrix = []
     for _ in range(row):
-        dec_cipher += [[None] * col]
+        ptMatrix += [[None] * col]
   
-    # Arrange the matrix column wise according 
-    # to permutation order by adding into new matrix
+    # Convert the key into a sorted list so 
+    # we can access the characters by their 
+    # alphabetical position
+    keyList = sorted(list(_key))
+
+    # Using a new matrix, return the order of 
+    # the columns to the order of the key
+    k_indx = 0
+    ptIndex = 0
+    ptList = list(_ciphertext)
     for _ in range(col):
-        curr_idx = _key.index(key_lst[k_indx])
+        currentIndex = _key.index(keyList[k_indx])
   
         for j in range(row):
-            dec_cipher[j][curr_idx] = msg_lst[msg_indx]
-            msg_indx += 1
+            ptMatrix[j][currentIndex] = ptList[ptIndex]
+            ptIndex += 1
         k_indx += 1
   
-    # convert decrypted msg matrix into a string
+    # Convert the plaintext from a matrix to a string
+    plaintext = ""
     try:
-        msg = ''.join(sum(dec_cipher, []))
+        plaintext = ''.join(sum(ptMatrix, []))
     except TypeError:
-        raise TypeError("This program cannot",
-                        "handle repeating words.")
+        raise TypeError("This program cannot handle repeating words.")
   
-    null_count = msg.count('_')
-  
+    # Remove any filler characters
+    null_count = plaintext.count('$')
     if null_count > 0:
-        return msg[: -null_count]
+        return plaintext[: -null_count]
   
-    return msg
+    return plaintext
 
 
 def printResults(_plaintext, _ciphertext, _key):
