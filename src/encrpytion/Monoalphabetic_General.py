@@ -1,4 +1,3 @@
-import sys, random
 from string import ascii_uppercase
 
 
@@ -7,30 +6,37 @@ def menu():
     while choice != 'E' and choice != 'D':
         choice = input("Would you like to [E]ncrypt or [D]ecrypt? ")
 
-    key = "5.5"
-    while not key.isalpha():
-        key = input("Enter the key? (A word) ").upper()
+    interval = "a"
+    while not interval.isnumeric():
+        interval = input("Enter the number of columns? (1-26) ").upper()
 
-    key = "".join(dict.fromkeys(key+ ascii_uppercase))
-    checkValidKey(key)
+    key = makeKey(int(interval))
 
     if choice == 'E':
         plaintext = input("What is the message you would like to encrypt? ")
         ciphertext = translateMessage(plaintext, key,choice)
-        printResults(plaintext, ciphertext, key)
+        printResults(plaintext, ciphertext, key, interval)
     elif choice == 'D':
         ciphertext = input("What is the message you would like to decrypt? ")
         plaintext = translateMessage(ciphertext, key, choice)
-        printResults(plaintext, ciphertext, key)
+        printResults(plaintext, ciphertext, key, interval)
 
 
-def checkValidKey(key):
-    keyList = list(key)
-    lettersList = list(ascii_uppercase)
-    keyList.sort()
-    lettersList.sort()
-    if keyList != lettersList:
-        sys.exit('There is an error in the key or symbol set.')
+def makeKey(_interval):
+    letters=[]
+    letters[:0] = ascii_uppercase
+    key = ""
+    loops = 26
+    i = 0
+    resets = 0
+    while loops > 0:
+        key += letters[i]
+        i += _interval
+        loops -= 1
+        if(i >= 26):
+            resets+=1
+            i = resets
+    return key
 
 
 def translateMessage(message, key, mode):
@@ -55,10 +61,10 @@ def translateMessage(message, key, mode):
 
     return translated
 
-def printResults(_plaintext, _ciphertext, _key):
+def printResults(_plaintext, _ciphertext, _key, _interval):
         print("Plaintext: " + str(_plaintext))
         print("Key: " + str(_key))
+        print("Interval: " + str(_interval))
         print("Ciphertext: " + str(_ciphertext))
-
 
 menu()
