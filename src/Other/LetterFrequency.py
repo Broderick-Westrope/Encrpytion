@@ -17,7 +17,10 @@ def countAll(_path):
 
     return letters
 
-D = countAll("src\\Other\\test.txt")
+path = input("What file would you like to use? (text.txt) ")
+D = countAll("src\\Other\\" + path)
+# D = D | countAll("src\\Other\\" + path)
+# S = {k: v for k, v in sorted(D.items(), key=lambda item: item[1])}
 print(D)
 plt.bar(range(len(D)), list(D.values()), align='center')
 plt.xticks(range(len(D)), list(D.keys()))
