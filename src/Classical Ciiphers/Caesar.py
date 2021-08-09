@@ -1,4 +1,5 @@
 import math
+from random import randint
 
 def encrypt(_text, _key):
     result = ""
@@ -42,23 +43,27 @@ def menu():
     key = 5.5
     while True:
         val = input("Enter the key? (0-25) ")
-        try:
-            key = int(val)
-            key = math.floor(key)
-            while key < 0:
-                key += 25
-            while key > 25:
-                key -= 25
+        if(val == "R"):
+            key = randint(0,25)
             break
-        except ValueError:
-            print("Please enter a number between 0 and 25 (inclusive).")
+        else:
+            try:
+                key = int(val)
+                key = math.floor(key)
+                while key < 0:
+                    key += 25
+                while key > 25:
+                    key -= 25
+                break
+            except ValueError:
+                print("Please enter a number between 0 and 25 (inclusive).")
 
     if choice == 'E':
-        plaintext = input("What is the message you would like to encrypt? ")
+        plaintext = input("What is the message you would like to encrypt? ").replace(" ", "").upper()
         ciphertext = encrypt(plaintext, key)
         printResults(plaintext, ciphertext, key)
     elif choice == 'D':
-        ciphertext = input("What is the message you would like to decrypt? ")
+        ciphertext = input("What is the message you would like to decrypt? ").replace(" ", "").upper()
         plaintext = decrypt(ciphertext, key)
         printResults(plaintext, ciphertext, key)
 
