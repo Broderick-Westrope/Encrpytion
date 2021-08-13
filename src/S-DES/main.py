@@ -1,5 +1,6 @@
 from encryption import *
 from decryption import *
+from keyGenerator import *
 from keyGenerator import generate_k1_k2
 import secrets
 

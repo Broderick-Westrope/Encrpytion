@@ -1,9 +1,14 @@
 from string import ascii_uppercase
 
+
 def Matrix(x, y, initial):
     return [[initial for i in range(x)] for j in range(y)]
 
+ # todo Use dictionary!!!!!!!!!
+
+
 matrix = Matrix(5, 5, 0)
+
 
 def locateChar(c):
     pos = list()
@@ -19,7 +24,7 @@ def locateChar(c):
 
 
 def encrypt():
-    plaintext = str(input("Enter message: ")).replace(" ","").upper()
+    plaintext = str(input("Enter message: ")).replace(" ", "").upper()
 
     i = 0
     for s in range(0, len(plaintext)+1, 2):
@@ -96,7 +101,7 @@ def generateMatrix():
                 pass
             else:
                 result.append(chr(i))
-    
+
     # Make the matrix
     k = 0
     for i in range(5):
@@ -105,6 +110,8 @@ def generateMatrix():
             k += 1
 
 # Starting menu
+
+
 def menu():
     generateMatrix()
 
@@ -118,5 +125,6 @@ def menu():
             exit()
         else:
             print("Choose correct choice")
+
 
 menu()

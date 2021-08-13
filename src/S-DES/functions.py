@@ -43,48 +43,53 @@ def str2bits(n):
     return result
 
 
-def FK(IP, k):
-    right_block = splitIn2(IP)[1]  # Take only the second half
-    right_block_concatenate = np.concatenate(
-        (right_block, right_block), axis=0)  # Concatenate the half to itself (making it 8 digits again)
+def FK(block, key):
+    right_block = splitIn2(block)[1]  # Take only the second half
+    # Concatenate the half to itself (making it 8 digits again)
+    right_block_concatenate = np.concatenate((right_block, right_block), axis=0)
     ep = EP(right_block_concatenate)  # Perform the E/P (extension/permutation)
-    textMatrix = createMatrix(ep)  # Turn the text into a matrix
-    keyMatrix = createMatrix(k)  # Turn the key into a matrix
+    blockMatrix = createMatrix(ep)  # Turn the text into a matrix
+    keyMatrix = createMatrix(key)  # Turn the key into a matrix
     # Get the XOR result between the text and key matrices
-    xorResults = xor(textMatrix, keyMatrix)
+    results_XOR = xor(blockMatrix, keyMatrix)
 
-    # Calculate what indices need to be grabbed from S0 and S1
     indices_matrix = [0, 1, 0, 2, 0, 0, 0, 3, 1, 1, 1, 2, 1, 0, 1, 3]
     s_temp = []
     s = []
 
     for i in range(0, len(indices_matrix), 4):
-        s_temp.append(xorResults[indices_matrix[i], indices_matrix[i + 1]] * 1)
-        s_temp.append(xorResults[indices_matrix[i + 2], indices_matrix[i + 3]] * 1)
+        s_temp.append(results_XOR[indices_matrix[i], indices_matrix[i + 1]] * 1)
+        s_temp.append(results_XOR[indices_matrix[i + 2], indices_matrix[i + 3]] * 1)
 
     for i in range(0, len(s_temp), 2):
         str_result = str(s_temp[i]) + str(s_temp[i + 1])
         s.append(int(str_result, 2))
 
-    # Create the S0 and S1 matrices
-    s0 = np.matrix([[1, 0, 3, 2], [3, 2, 1, 0], [0, 2, 1, 3], [3, 1, 3, 2]])
-    s1 = np.matrix([[0, 1, 2, 3], [2, 0, 1, 3], [3, 0, 1, 0], [2, 1, 0, 3]])
+    # Create the S blocks as matrices
+    S0 = np.matrix([[1, 0, 3, 2], [3, 2, 1, 0], [0, 2, 1, 3], [3, 1, 3, 2]])
+    S1 = np.matrix([[0, 1, 2, 3], [2, 0, 1, 3], [3, 0, 1, 0], [2, 1, 0, 3]])
 
-    # Grab the correct values from S0 and S1
-    a = s0[s[1], s[0]]
-    b = s1[s[3], s[2]]
+    # Get the correct values from the S blocks using the column
+    a = S0[s[1], s[0]]
+    b = S1[s[3], s[2]]
 
-    # Convert it to bit values
+    # Convert the values to bits
     a = str2bits(a)
     b = str2bits(b)
 
-    R8 = np.concatenate([np.array(bitarray(a).tolist()),
-                         np.array(bitarray(b).tolist())], axis=0)
-    R9 = P4(R8)
-    left_block = splitIn2(IP)[0]
-    R10 = xor(left_block, R9)
-    R11 = np.concatenate([R10, right_block])
-    return R11
+    # The results from the S blocks combined
+    sBlocksCombined = np.concatenate(
+        [np.array(bitarray(a).tolist()), np.array(bitarray(b).tolist())], axis=0)
+
+    # Perform the P4 function
+    results_P4 = P4(sBlocksCombined)
+
+    # Get the XOR result of the left half of the original block, and the encryption results
+    results_XOR = xor(splitIn2(block)[0], results_P4)
+
+    # Combine the right half of the original block with the encryption results
+    finalConcatenation = np.concatenate([results_XOR, right_block])
+    return finalConcatenation
 
 #####################################################################
 
