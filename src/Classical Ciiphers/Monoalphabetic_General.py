@@ -14,7 +14,7 @@ def menu():
 
     if choice == 'E':
         plaintext = input("What is the message you would like to encrypt? ")
-        ciphertext = translateMessage(plaintext, key,choice)
+        ciphertext = translateMessage(plaintext, key, choice)
         printResults(plaintext, ciphertext, key, interval)
     elif choice == 'D':
         ciphertext = input("What is the message you would like to decrypt? ")
@@ -23,7 +23,7 @@ def menu():
 
 
 def makeKey(_interval):
-    letters=[]
+    letters = []
     letters[:0] = ascii_uppercase
     key = ""
     loops = 26
@@ -34,7 +34,7 @@ def makeKey(_interval):
         i += _interval
         loops -= 1
         if(i >= 26):
-            resets+=1
+            resets += 1
             i = resets
     return key
 
@@ -61,10 +61,12 @@ def translateMessage(message, key, mode):
 
     return translated
 
+
 def printResults(_plaintext, _ciphertext, _key, _interval):
-        print("Plaintext: " + str(_plaintext))
-        print("Key: " + str(_key))
-        print("Interval: " + str(_interval))
-        print("Ciphertext: " + str(_ciphertext))
+    print("Plaintext: " + str(_plaintext))
+    print("Key: " + str(_key))
+    print("Interval: " + str(_interval))
+    print("Ciphertext: " + str(_ciphertext))
+
 
 menu()
