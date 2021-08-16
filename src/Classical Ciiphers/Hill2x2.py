@@ -29,6 +29,7 @@ def encrypt(plaintext):
         encrypted_msg += chr(integer)
     return encrypted_msg
 
+
 def decrypt(ciphertext):
     # Ask for keyword and get encryption matrix
     C = makeKey()
@@ -65,6 +66,7 @@ def decrypt(ciphertext):
         decrypted_msg = decrypted_msg[:-1]
     return decrypted_msg
 
+
 def findMultiplicativeInverse(determinant):
     multiplicative_inverse = -1
     for i in range(26):
@@ -75,25 +77,29 @@ def findMultiplicativeInverse(determinant):
     return multiplicative_inverse
 
 # Turn the given 4-letter key into a 2x2 matrix
+
+
 def makeKey():
-     # Make sure cipher determinant is relatively prime to 26 and only a/A - z/Z are given
+    # Make sure cipher determinant is relatively prime to 26 and only a/A - z/Z are given
     determinant = 0
     K = None
     while True:
-        key = input("Input 4 letter key: ").replace(" ","").upper()
+        key = input("Input 4 letter key: ").replace(" ", "").upper()
         K = generateMatrix(key)
         determinant = K[0][0] * K[1][1] - K[0][1] * K[1][0]
         determinant = determinant % 26
-        print("The determinant is "+ str(determinant))
+        print("The determinant is " + str(determinant))
         inverse_element = findMultiplicativeInverse(determinant)
         if inverse_element == -1:
-            print("The determinant " + str(determinant) + " is not relatively prime to 26, making the key uninvertible.")
+            print("The determinant " + str(determinant) +
+                  " is not relatively prime to 26, making the key uninvertible.")
         elif np.amax(K) > 26 or np.amin(K) < 0:
             print("Only A-Z characters are accepted")
             print(np.amax(K), np.amin(K))
         else:
             break
     return K
+
 
 def generateMatrix(string):
     # Map string to a list of integers A <-> 0, B <-> 1 ... Z <-> 25
@@ -107,8 +113,10 @@ def generateMatrix(string):
             iterator += 1
     return M
 
+
 if __name__ == "__main__":
-    plaintext = input("What message would you like to encrypt? ").replace(" ","").upper()
+    plaintext = input("What message would you like to encrypt? ").replace(
+        " ", "").upper()
 
     ciphertext = encrypt(plaintext)
     print(ciphertext)

@@ -10,12 +10,12 @@ def menu():
     while not key.isalpha():
         key = input("Enter the key? (A word) ").upper()
 
-    key = "".join(dict.fromkeys(key+ ascii_uppercase))
+    key = "".join(dict.fromkeys(key + ascii_uppercase))
     checkValidKey(key)
 
     if choice == 'E':
         plaintext = input("What is the message you would like to encrypt? ")
-        ciphertext = translateMessage(plaintext, key,choice)
+        ciphertext = translateMessage(plaintext, key, choice)
         printResults(plaintext, ciphertext, key)
     elif choice == 'D':
         ciphertext = input("What is the message you would like to decrypt? ")
@@ -39,25 +39,23 @@ def translateMessage(message, key, mode):
     if mode == 'D':
         charsA, charsB = charsB, charsA
 
-    print(str(len(charsA)))
-    print(str(len(charsB)))
-
-    for symbol in message:
-        if symbol.upper() in charsA:
-            symIndex = charsA.find(symbol.upper())
-            if symbol.isupper():
+    for character in message:
+        if character.upper() in charsA:
+            symIndex = charsA.find(character.upper())
+            if character.isupper():
                 translated += charsB[symIndex].upper()
             else:
                 translated += charsB[symIndex].lower()
         else:
-            translated += symbol
+            translated += character
 
     return translated
 
+
 def printResults(_plaintext, _ciphertext, _key):
-        print("Plaintext: " + str(_plaintext))
-        print("Key: " + str(_key))
-        print("Ciphertext: " + str(_ciphertext))
+    print("Plaintext: " + str(_plaintext))
+    print("Key: " + str(_key))
+    print("Ciphertext: " + str(_ciphertext))
 
 
 menu()

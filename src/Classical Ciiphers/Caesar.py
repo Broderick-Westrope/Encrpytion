@@ -52,9 +52,9 @@ def menu():
                 key = int(val)
                 key = math.floor(key)
                 while key < 0:
-                    key += 25
+                    key += 26
                 while key > 25:
-                    key -= 25
+                    key -= 26
                 break
             except ValueError:
                 print("Please enter a number between 0 and 25 (inclusive).")
