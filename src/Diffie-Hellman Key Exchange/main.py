@@ -1,12 +1,42 @@
-import Endpoint
+from random import randint
+from GetPrime import getNBitPrime
+from PrimitiveRoot import findPrimitive
 
-message = "This is a very secret message!!!"
 
-s_public = 197
-s_private = 199
+def generateValues():
+    while True:
+        p = getNBitPrime(8)
+        g = findPrimitive(p)
+        if(g != -1):
+            break
+    Xa, Xb = randint(2, p-1), randint(2, p-1)
 
-m_public = 151
-m_private = 157
+    Ya = g**Xa  # ! Change this to use SAM (Square and multiply)
+    Ya %= p
 
-Sadat = Endpoint(s_public, m_public, s_private)
-Michael = Endpoint(s_public, m_public, m_private)
+    Yb = g**Xb  # ! Change this to use SAM (Square and multiply)
+    Yb %= p
+
+    Ka = Yb**Xa
+    Ka %= p
+
+    Kb = Ya**Xb
+    Kb %= p
+
+    assert Ka == Kb
+    return(p, g, Xa, Xb, Ya, Yb, Ka)
+
+
+def printValues(p, g, Xa, Xb, Ya, Yb, K):
+    print("p:\t", p)
+    print("g:\t", g)
+    print("Xa:\t", Xa)
+    print("Xb:\t", Xb)
+    print("Ya:\t", Ya)
+    print("Yb:\t", Yb)
+    print("K:\t", K)
+
+
+if __name__ == '__main__':
+    p, g, Xa, Xb, Ya, Yb, K = generateValues()
+    printValues(p, g, Xa, Xb, Ya, Yb, K)

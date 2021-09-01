@@ -26,8 +26,6 @@ def calculateMultiplicativeInverse(b, m):
 
 
 def SAM(base, power):
-    # print(base, "^", power)
-
     # x^0 = 1
     if not power:
         return 1
