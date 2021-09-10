@@ -52,15 +52,9 @@ def findRandomPrimitive(n):  # Function to find a random primitive root of n
     # Find prime factors of phi and store in a set
     s = findPrimeFactors(phi)
 
-    # Check for every number from 2 to phi in a random order
-    candidates = range(2, phi + 1)
-    print(str(candidates))
-    candidates = list(candidates)
-    print(str(candidates))
+    # Check for every number from 2 to phi in a random order (by first shuffling the )
+    candidates = list(range(2, phi + 1))
     shuffle(candidates)
-    print(str(candidates))
-    # candidates = iter(candidates)
-    # print(str(candidates))
     for r in candidates:
 
         # Iterate through all prime factors of phi and check if we found a power with value 1

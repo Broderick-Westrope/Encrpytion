@@ -31,6 +31,6 @@ def theSieve(n):
 
 # Driver code
 if __name__ == '__main__':
-    n = 1000
+    n = 10000
     print("Following are the prime numbers smaller than or equal to", n)
     print(str(theSieve(n)))
