@@ -6,11 +6,9 @@ def power(x, y, p):
 
     res = 1  # Initialize result
 
-    x = x % p  # Update x if it is more
-    # than or equal to p
+    x = x % p  # Perform x (mod p)
 
     while (y > 0):
-
         # If y is odd, multiply x with result
         if (y & 1):
             res = (res * x) % p
