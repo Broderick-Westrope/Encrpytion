@@ -1,33 +1,5 @@
-# Python3 program to find primitive root
-# of a given number n
 from math import sqrt
-
-# Returns True if n is prime
-
-
-def isPrime(n):
-
-    # Corner cases
-    if (n <= 1):
-        return False
-    if (n <= 3):
-        return True
-
-    # This is checked so that we can skip
-    # middle five numbers in below loop
-    if (n % 2 == 0 or n % 3 == 0):
-        return False
-    i = 5
-    while(i * i <= n):
-        if (n % i == 0 or n % (i + 2) == 0):
-            return False
-        i = i + 6
-
-    return True
-
-
-""" Iterative Function to calculate (x^n)%p
-	in O(logy) */"""
+from random import shuffle
 
 
 def power(x, y, p):
@@ -49,11 +21,9 @@ def power(x, y, p):
 
     return res
 
-# Utility function to store prime
-# factors of a number
 
-
-def findPrimefactors(s, n):
+def findPrimeFactors(n):
+    s = set()
 
     # Print the number of 2s that divide n
     while (n % 2 == 0):
@@ -74,32 +44,28 @@ def findPrimefactors(s, n):
     # when n is a prime number greater than 2
     if (n > 2):
         s.add(n)
-
-# Function to find smallest primitive
-# root of n
+    return s
 
 
-def findPrimitive(n):
-    s = set()
-
-    # Check if n is prime or not
-    if (isPrime(n) == False):
-        return -1
-
-    # Find value of Euler Totient function
-    # of n. Since n is a prime number, the
-    # value of Euler Totient function is n-1
-    # as there are n-1 relatively prime numbers.
+def findRandomPrimitive(n):  # Function to find a random primitive root of n
+    # Calculates the value of the Euler Totient of n (phi). This is n-1 since n is prime.
     phi = n - 1
 
     # Find prime factors of phi and store in a set
-    findPrimefactors(s, phi)
+    s = findPrimeFactors(phi)
 
-    # Check for every number from 2 to phi
-    for r in range(2, phi + 1):
+    # Check for every number from 2 to phi in a random order
+    candidates = range(2, phi + 1)
+    print(str(candidates))
+    candidates = list(candidates)
+    print(str(candidates))
+    shuffle(candidates)
+    print(str(candidates))
+    # candidates = iter(candidates)
+    # print(str(candidates))
+    for r in candidates:
 
-        # Iterate through all prime factors of phi.
-        # and check if we found a power with value 1
+        # Iterate through all prime factors of phi and check if we found a power with value 1
         flag = False
         for it in s:
 
@@ -116,3 +82,6 @@ def findPrimitive(n):
 
     # If no primitive root found
     return -1
+
+
+print(findRandomPrimitive(107))

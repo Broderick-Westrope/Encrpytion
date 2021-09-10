@@ -1,12 +1,12 @@
 from random import randint
 from GetPrime import getNBitPrime
-from PrimitiveRoot import findPrimitive
+from PrimitiveRoot import findRandomPrimitive
 
 
 def generateValues():
     while True:
         p = getNBitPrime(8)
-        g = findPrimitive(p)
+        g = findRandomPrimitive(p)
         if(g != -1):
             break
     Xa, Xb = randint(2, p-1), randint(2, p-1)
